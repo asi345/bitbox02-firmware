@@ -157,11 +157,13 @@ static void _api_msg(const Packet* in_packet, Packet* out_packet, const size_t m
             result = ERR_FAILED;
             break;
         }
+
         if (!memory_set_attestation_device_pubkey(pubkey)) {
             screen_print_debug("setting pubkey\nfailed", 0);
             result = ERR_FAILED;
             break;
         }
+
         memcpy(output + 2, pubkey, 64);
         out_len = 2 + 64;
         break;
@@ -184,6 +186,7 @@ static void _api_msg(const Packet* in_packet, Packet* out_packet, const size_t m
             result = ERR_INVALID_INPUT;
             break;
         }
+
         uint8_t msg32[SHA256_LEN] = {0};
         _attestation_sighash(attestation_device_pubkey, msg32);
         bool matches_a_root_pubkey = false;
@@ -251,7 +254,7 @@ static void _api_setup(void)
         usb_processing_hww(), cmd_callbacks, sizeof(cmd_callbacks) / sizeof(CMD_Callback));
     screen_print_debug("READY", 0);
 }
-
+#include <screen.h>
 int main(void)
 {
     init_mcu();
@@ -274,8 +277,19 @@ int main(void)
             // Not much we can do here.
         }
     }
-    usb_start(_api_setup);
+    uint8_t pubk[64];
+    if (!securechip_gen_attestation_key(pubk)) {
+        screen_print_debug("no gen attestation", 2000);
+        return 1;
+    }
+    screen_print_debug("gen attestation ok", 2000);
+    if (!memory_set_attestation_device_pubkey(pubk)) {
+        screen_print_debug("no mem set", 2000);
+        return 1;
+    }
+    screen_print_debug("mem set ok", 2000);
 
+    usb_start(_api_setup);
     while (1) {
         usb_processing_process(usb_processing_hww());
     }
