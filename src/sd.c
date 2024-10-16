@@ -27,6 +27,7 @@
 #include "screen.h"
 #include "sd.h"
 #include "util.h"
+#include <sd_mmc/sd_mmc_start.h>
 
 #include <ff.h>
 
@@ -90,6 +91,11 @@ static bool _get_absolute_path(
         return false;
     }
     return true;
+}
+
+void sd_card_init(void)
+{
+    sd_mmc_start();
 }
 
 /**

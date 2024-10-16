@@ -20,6 +20,14 @@ use crate::util::str_to_cstr_vec;
 use bitbox02_sys::SD_MAX_FILE_SIZE;
 
 #[cfg(not(feature = "testing"))]
+pub fn sdcard_init() -> () {
+    unsafe { bitbox02_sys::sd_card_init() }
+}
+
+#[cfg(feature = "testing")]
+pub fn sdcard_init() {}
+
+#[cfg(not(feature = "testing"))]
 pub fn sdcard_inserted() -> bool {
     unsafe { bitbox02_sys::sd_card_inserted() }
 }

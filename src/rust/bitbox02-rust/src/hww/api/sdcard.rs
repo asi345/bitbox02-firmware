@@ -23,6 +23,7 @@ use crate::workflow::sdcard;
 pub async fn process(
     &pb::InsertRemoveSdCardRequest { action }: &pb::InsertRemoveSdCardRequest,
 ) -> Result<Response, Error> {
+    bitbox02::sd::sdcard_init();
     let inserted = bitbox02::sd::sdcard_inserted();
     match SdCardAction::try_from(action) {
         Ok(SdCardAction::InsertCard) => {}

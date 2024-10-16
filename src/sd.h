@@ -28,6 +28,7 @@ typedef struct {
     char** files;
 } sd_list_t;
 
+void sd_card_init(void);
 // the caller must free list_out using sd_free_list(). list_out itself is not
 // freed, as it could be passed as a stack var.
 USE_RESULT bool sd_list(sd_list_t* list_out);

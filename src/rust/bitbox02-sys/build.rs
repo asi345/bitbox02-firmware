@@ -116,6 +116,7 @@ const ALLOWLIST_FNS: &[&str] = &[
     "screen_process",
     "screen_saver_disable",
     "screen_saver_enable",
+    "sd_card_init",
     "sd_card_inserted",
     "sd_erase_file_in_subdir",
     "sd_format",
